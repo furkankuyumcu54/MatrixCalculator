@@ -2,8 +2,9 @@
 #include <stdlib.h>
 
 int** createMatrix(int row_size, int column_size);
+void printMatrix(int **matrix, int row_size, int column_size);
 
-int main() {
+        int main() {
 
     int rows = 5;
     int cols = 5;
@@ -14,13 +15,8 @@ int main() {
             matrix[i][j] = i * j;
         }
     }
+    printMatrix(matrix, rows, cols);
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%d\t", matrix[i][j]);
-        }
-        printf("\n");
-    }
     return 0;
 }
 
@@ -40,4 +36,13 @@ int** createMatrix(int row_size, int column_size) {
     }
     
     return matrix;
+}
+
+void printMatrix(int **matrix, int row_size, int column_size) {
+    for (int i = 0; i < row_size; i++) {
+        for (int j = 0; j < column_size; j++) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n");
+    }
 }
