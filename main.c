@@ -3,7 +3,7 @@
 
 int** createMatrix(int row_size, int column_size);
 void printMatrix(int **matrix, int row_size, int column_size);
-void transpose (int **matrix , int row_size , int column_size);
+void transpose(int **matrix , int row_size , int column_size);
 void clearScreen();
 
 int main() {
@@ -18,17 +18,19 @@ int main() {
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            *(*(matrix+i)+j) = (i+1) * (j+1);
+            *(*(matrix+i)+j) = (i+1) + (j+1);
         }
     }
 
     clearScreen();
     printMatrix(matrix, rows, cols);
-    printf("\n Transposing ...\n");
-    printf("---------------------------------\n");
+
     transpose(matrix,rows,cols);
+    printMatrix(matrix, rows, cols);
+
     return 0;
 }
+
 
 void clearScreen() {
     #ifdef _WIN32
@@ -37,6 +39,7 @@ void clearScreen() {
         system("clear");
     #endif
 }
+
 
 int** createMatrix(int row_size, int column_size) {
     int **matrix = (int**) malloc(row_size * sizeof(int*));
@@ -56,23 +59,27 @@ int** createMatrix(int row_size, int column_size) {
     return matrix;
 }
 
+
 void printMatrix(int **matrix, int row_size, int column_size) {
     for (int i = 0; i < row_size; i++) {
         for (int j = 0; j < column_size; j++) {
-            printf("[%d]\t", *(*(matrix+i)+j));
+            printf("%d\t", *(*(matrix + i) + j));
         }
         printf("\n");
     }
 }
-void transpose (int **matrix , int row_size , int column_size)
-{
-    for (int i = 0; i < column_size; i++)
-    {
-        for (int j = 0; j < row_size; j++)
-        {
-            printf("[%d]\t",*(*(matrix+j)+i));
+
+
+void transpose(int **matrix , int row_size , int column_size) {
+
+    printf("Transposing ...\n");
+    printf("---------------------------------\n");
+
+    for (int i = 0; i < row_size; i++) {
+        for (int j = i + 1; j < column_size; j++) {
+            int temp = *(*(matrix + i) + j);
+            *(*(matrix + i) + j) = *(*(matrix + j) + i);
+            *(*(matrix + j) + i) = temp;
         }
-        printf("\n");
     }
-    
 }
