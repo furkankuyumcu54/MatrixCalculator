@@ -4,7 +4,6 @@
 int** createMatrix(int row_size, int column_size);
 void printMatrix(int **matrix, int row_size, int column_size);
 void transpose (int **matrix , int row_size , int column_size);
-
 void clearScreen();
 
 int main() {
@@ -32,7 +31,10 @@ int main() {
 }
 
 void clearScreen() {
-    system("clear");
+    #ifdef _WIN32
+        system("cls");
+    #elif defined(__linux__)
+        system("clear");
 }
 
 int** createMatrix(int row_size, int column_size) {
