@@ -1,25 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define rows 5
-#define cols 3
+
 int** createMatrix(int row_size, int column_size);
 void printMatrix(int **matrix, int row_size, int column_size);
 void transpose (int **matrix , int row_size , int column_size);
-        int main() {
 
-    
+void clearScreen();
+
+int main() {
+
+    int rows, cols;
+    printf("How many rows wanted in matrix?: ");
+    scanf("%d", &rows);
+    printf("How many columns wanted in matrix?: ");
+    scanf("%d", &cols);
+
     int **matrix = createMatrix(rows, cols);
-    int a = 1;
+
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            matrix[i][j] = a++;
+            matrix[i][j] = (i+1) * (j+1);
         }
     }
+
+    clearScreen();
     printMatrix(matrix, rows, cols);
     printf("\n Transposing ...\n");
     printf("---------------------------------\n");
     transpose(matrix,rows,cols);
     return 0;
+}
+
+void clearScreen() {
+    system("clear");
 }
 
 int** createMatrix(int row_size, int column_size) {
@@ -43,12 +56,11 @@ int** createMatrix(int row_size, int column_size) {
 void printMatrix(int **matrix, int row_size, int column_size) {
     for (int i = 0; i < row_size; i++) {
         for (int j = 0; j < column_size; j++) {
-            printf("[%d]\t", matrix[i][j]);
+            printf("%d\t", matrix[i][j]);
         }
         printf("\n");
     }
 }
-
 void transpose (int **matrix , int row_size , int column_size)
 {
     for (int i = 0; i < column_size; i++)
