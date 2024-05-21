@@ -3,11 +3,16 @@
 
 int** createMatrix(int row_size, int column_size);
 void printMatrix(int **matrix, int row_size, int column_size);
+void clearScreen();
 
-        int main() {
+int main() {
 
-    int rows = 5;
-    int cols = 5;
+    int rows, cols;
+    printf("How many rows wanted in matrix?: ");
+    scanf("%d", &rows);
+    printf("How many columns wanted in matrix?: ");
+    scanf("%d", &cols);
+
     int **matrix = createMatrix(rows, cols);
 
     for (int i = 0; i < rows; i++) {
@@ -15,9 +20,15 @@ void printMatrix(int **matrix, int row_size, int column_size);
             matrix[i][j] = i * j;
         }
     }
+
+    clearScreen();
     printMatrix(matrix, rows, cols);
 
     return 0;
+}
+
+void clearScreen() {
+    system("clear");
 }
 
 int** createMatrix(int row_size, int column_size) {
