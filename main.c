@@ -35,6 +35,7 @@ void clearScreen() {
         system("cls");
     #elif defined(__linux__)
         system("clear");
+    #endif
 }
 
 int** createMatrix(int row_size, int column_size) {
