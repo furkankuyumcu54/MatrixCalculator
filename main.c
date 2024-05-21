@@ -3,6 +3,7 @@
 
 int** createMatrix(int row_size, int column_size);
 void printMatrix(int **matrix, int row_size, int column_size);
+void transpose (int **matrix , int row_size , int column_size);
 void clearScreen();
 
 int main() {
@@ -17,13 +18,15 @@ int main() {
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            matrix[i][j] = i * j;
+            *(*(matrix+i)+j) = (i+1) * (j+1);
         }
     }
 
     clearScreen();
     printMatrix(matrix, rows, cols);
-
+    printf("\n Transposing ...\n");
+    printf("---------------------------------\n");
+    transpose(matrix,rows,cols);
     return 0;
 }
 
@@ -55,8 +58,20 @@ int** createMatrix(int row_size, int column_size) {
 void printMatrix(int **matrix, int row_size, int column_size) {
     for (int i = 0; i < row_size; i++) {
         for (int j = 0; j < column_size; j++) {
-            printf("%d\t", matrix[i][j]);
+            printf("[%d]\t", *(*(matrix+i)+j));
         }
         printf("\n");
     }
+}
+void transpose (int **matrix , int row_size , int column_size)
+{
+    for (int i = 0; i < column_size; i++)
+    {
+        for (int j = 0; j < row_size; j++)
+        {
+            printf("[%d]\t",*(*(matrix+j)+i));
+        }
+        printf("\n");
+    }
+    
 }
