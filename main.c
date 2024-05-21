@@ -28,7 +28,10 @@ int main() {
 }
 
 void clearScreen() {
-    system("clear");
+    #ifdef _WIN32
+        system("cls");
+    #elif defined(__linux__)
+        system("clear");
 }
 
 int** createMatrix(int row_size, int column_size) {
