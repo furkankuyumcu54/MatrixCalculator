@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ROW_MAX 5
+#define COLUMN_MAX 5
+
+typedef struct matrix {
+    char name[10];
+    int row_size;
+    int column_size;
+    int **matrix;
+} Matrix;
+
 int** createMatrix(int row_size, int column_size);
 void printMatrix(int **matrix, int row_size, int column_size);
 void transpose(int **matrix , int row_size , int column_size);
