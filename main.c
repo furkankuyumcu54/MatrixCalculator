@@ -29,7 +29,7 @@ int main() {
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            matrix->data[i][j] = (i+1) + (j+1);
+            *(*(matrix->data + i) + j) = (i+1) + (j+1);
         }
     }
 
@@ -72,7 +72,7 @@ Matrix *createMatrix(char name[], int row_size, int column_size) {
     }
 
     for (int i = 0; i < row_size; i++) {
-        matrix->data[i] = (int*)malloc(column_size * sizeof(int));
+        *(matrix->data + i) = (int*)malloc(column_size * sizeof(int));
         if (matrix->data[i] == NULL) {
             printf("Memory allocation failed.\n");
             exit(1);
@@ -89,7 +89,7 @@ void printMatrix(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; i++) {
         for (int j = 0; j < matrix->cols; j++) {
-            printf("%d\t", matrix->data[i][j]);
+            printf("%d\t", *(*(matrix->data + i) + j));
         }
         printf("\n");
     }
@@ -105,9 +105,10 @@ void transpose(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; i++) {
         for (int j = i + 1; j < matrix->cols; j++) {
-            int temp = matrix->data[i][j];
-            matrix->data[i][j] = matrix->data[j][i];
-            matrix->data[j][i] = temp;
+            int temp = *(*(matrix->data + i) + j);
+            *(*(matrix->data + i) + j) = *(*(matrix->data + j) + i);
+            *(*(matrix->data + j) + i) = temp;
         }
     }
 }
+5
