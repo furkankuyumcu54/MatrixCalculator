@@ -5,6 +5,10 @@
 #define ROW_MAX 5
 #define COLUMN_MAX 5
 
+typedef enum page {
+    mainPage = 0, transposePage
+}Page;
+
 typedef struct matrix {
     char name[12];
     int rows;
@@ -14,30 +18,35 @@ typedef struct matrix {
 
 Matrix *createMatrix(char name[], int row_size, int column_size);
 void printMatrix(Matrix *matrix);
+void getMatrix(Matrix *matrix);
 void transpose(Matrix *matrix);
 void clearScreen();
+Page interface(Page page);
 
 int main() {
 
-    int rows, cols;
-    printf("How many rows wanted in matrix?: ");
-    scanf("%d", &rows);
-    printf("How many columns wanted in matrix?: ");
-    scanf("%d", &cols);
+    int t_rows, t_cols;
 
-    Matrix *matrix = createMatrix("Matrix1", rows, cols);
+    int operation = interface(mainPage);
+    switch (operation) {
+        case transposePage:
+            printf("How many rows wanted in matrix?: ");
+            scanf("%d", &t_rows);
+            printf("How many columns wanted in matrix?: ");
+            scanf("%d", &t_cols);
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            *(*(matrix->data + i) + j) = (i+1) + (j+1);
-        }
+            Matrix *matrix = createMatrix("Matrix1", t_rows, t_cols);
+            getMatrix(matrix);
+
+            clearScreen();
+            printMatrix(matrix);
+
+            transpose(matrix);
+            printMatrix(matrix);
+
+        default:
+            return 0;
     }
-
-    clearScreen();
-    printMatrix(matrix);
-
-    transpose(matrix);
-    printMatrix(matrix);
 
     return 0;
 }
@@ -96,6 +105,18 @@ void printMatrix(Matrix *matrix) {
 }
 
 
+void getMatrix(Matrix *matrix) {
+
+    for (int i = 0; i < matrix->rows; ++i) {
+        for (int j = 0; j < matrix->cols; ++j) {
+            printf("%d. satırın %d sutununu giriniz: ", i+1, j+1);
+            scanf("%d", (*(matrix->data + i) + j));
+        }
+    }
+
+}
+
+
 void transpose(Matrix *matrix) {
 
     printf("Transposing ...\n");
@@ -110,4 +131,22 @@ void transpose(Matrix *matrix) {
             *(*(matrix->data + j) + i) = temp;
         }
     }
+}
+
+Page interface(Page page) {
+
+    Page operation;
+    switch (page) {
+        case mainPage:
+            printf("---------------------------------\n\n");
+            printf("------- MATRIX CALCULATOR -------\n\n");
+            printf("---------------------------------\n\n");
+
+            printf("1 - Transpose Matrix\n\n");
+
+            printf("Type number for wanted operation: ");
+            scanf("%d", &operation);
+    }
+
+    return operation;
 }
