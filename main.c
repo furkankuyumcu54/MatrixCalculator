@@ -9,7 +9,7 @@ typedef struct matrix {
     char name[12];
     int rows;
     int cols;
-    int **matrix;
+    int **data;
 } Matrix;
 
 Matrix *createMatrix(char name[], int row_size, int column_size);
@@ -29,7 +29,7 @@ int main() {
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            matrix->matrix[i][j] = (i+1) + (j+1);
+            matrix->data[i][j] = (i+1) + (j+1);
         }
     }
 
@@ -65,15 +65,15 @@ Matrix *createMatrix(char name[], int row_size, int column_size) {
     matrix->cols = column_size;
 
 
-    matrix->matrix = (int**) malloc(row_size * sizeof(int*));
-    if (matrix->matrix == NULL) {
+    matrix->data = (int**) malloc(row_size * sizeof(int*));
+    if (matrix->data == NULL) {
         printf("Memory allocation failed.\n");
         exit(1);
     }
 
     for (int i = 0; i < row_size; i++) {
-        matrix->matrix[i] = (int*)malloc(column_size * sizeof(int));
-        if (matrix->matrix[i] == NULL) {
+        matrix->data[i] = (int*)malloc(column_size * sizeof(int));
+        if (matrix->data[i] == NULL) {
             printf("Memory allocation failed.\n");
             exit(1);
         }
@@ -89,7 +89,7 @@ void printMatrix(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; i++) {
         for (int j = 0; j < matrix->cols; j++) {
-            printf("%d\t", matrix->matrix[i][j]);
+            printf("%d\t", matrix->data[i][j]);
         }
         printf("\n");
     }
@@ -105,9 +105,9 @@ void transpose(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; i++) {
         for (int j = i + 1; j < matrix->cols; j++) {
-            int temp = matrix->matrix[i][j];
-            matrix->matrix[i][j] = matrix->matrix[j][i];
-            matrix->matrix[j][i] = temp;
+            int temp = matrix->data[i][j];
+            matrix->data[i][j] = matrix->data[j][i];
+            matrix->data[j][i] = temp;
         }
     }
 }
