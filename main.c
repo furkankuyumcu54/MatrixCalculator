@@ -21,7 +21,7 @@ void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
 void transpose(Matrix *matrix);
 void clearScreen();
-Page mainPage(void);
+int mainPage(void);
 Page interface(Page page);
 int shouldContinue(int loopControl);
 
@@ -147,9 +147,9 @@ void transpose(Matrix *matrix) {
 }
 
 
-Page mainPage(void) {
+int mainPage(void) {
 
-    Page operation;
+    int operation;
         printf("---------------------------------\n\n");
         printf("------- MATRIX CALCULATOR -------\n\n");
         printf("---------------------------------\n\n");
