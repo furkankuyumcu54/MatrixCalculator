@@ -23,23 +23,29 @@ void transpose(Matrix *matrix);
 void clearScreen();
 Page mainPage(void);
 Page interface(Page page);
+int shouldContinue(int loopControl);
 
 int main() {
 
+    char *t_name = (char *) calloc(1, 12);
     int t_rows, t_cols;
 
-    while (1) {
+    int loopControl = 1;
+    while (loopControl) {
 
         clearScreen();
         int operation = mainPage();
         switch (operation) {
             case transposePage:
+                printf("What name you want to give to this matrix?: ");
+                getchar();
+                fgets(t_name, 12, stdin);
                 printf("How many rows wanted in matrix?: ");
                 scanf("%d", &t_rows);
                 printf("How many columns wanted in matrix?: ");
                 scanf("%d", &t_cols);
 
-                Matrix *matrix = createMatrix("Matrix1", t_rows, t_cols);
+                Matrix *matrix = createMatrix(t_name, t_rows, t_cols);
                 getMatrix(matrix);
 
                 clearScreen();
@@ -47,6 +53,8 @@ int main() {
 
                 transpose(matrix);
                 printMatrix(matrix);
+                loopControl = shouldContinue(loopControl);
+                break;
 
             default:
                 return 0;
@@ -138,6 +146,7 @@ void transpose(Matrix *matrix) {
     }
 }
 
+
 Page mainPage(void) {
 
     Page operation;
@@ -153,3 +162,18 @@ Page mainPage(void) {
     return operation;
 }
 
+
+int shouldContinue(int loopControl) {
+    char answer;
+
+    printf("Would you like to continue using calculator? (Y/N): ");
+    scanf(" %c", &answer);
+
+    if (answer == 'Y' || answer == 'y') {
+        loopControl = 1;
+    } else {
+        loopControl = 0;
+    }
+
+    return loopControl;
+}
