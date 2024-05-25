@@ -6,7 +6,7 @@
 #define COLUMN_MAX 5
 
 typedef enum page {
-    mainPage = 0, transposePage
+    transposePage = 1
 }Page;
 
 typedef struct matrix {
@@ -21,31 +21,36 @@ void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
 void transpose(Matrix *matrix);
 void clearScreen();
+Page mainPage(void);
 Page interface(Page page);
 
 int main() {
 
     int t_rows, t_cols;
 
-    int operation = interface(mainPage);
-    switch (operation) {
-        case transposePage:
-            printf("How many rows wanted in matrix?: ");
-            scanf("%d", &t_rows);
-            printf("How many columns wanted in matrix?: ");
-            scanf("%d", &t_cols);
+    while (1) {
 
-            Matrix *matrix = createMatrix("Matrix1", t_rows, t_cols);
-            getMatrix(matrix);
+        clearScreen();
+        int operation = mainPage();
+        switch (operation) {
+            case transposePage:
+                printf("How many rows wanted in matrix?: ");
+                scanf("%d", &t_rows);
+                printf("How many columns wanted in matrix?: ");
+                scanf("%d", &t_cols);
 
-            clearScreen();
-            printMatrix(matrix);
+                Matrix *matrix = createMatrix("Matrix1", t_rows, t_cols);
+                getMatrix(matrix);
 
-            transpose(matrix);
-            printMatrix(matrix);
+                clearScreen();
+                printMatrix(matrix);
 
-        default:
-            return 0;
+                transpose(matrix);
+                printMatrix(matrix);
+
+            default:
+                return 0;
+        }
     }
 
     return 0;
@@ -133,20 +138,18 @@ void transpose(Matrix *matrix) {
     }
 }
 
-Page interface(Page page) {
+Page mainPage(void) {
 
     Page operation;
-    switch (page) {
-        case mainPage:
-            printf("---------------------------------\n\n");
-            printf("------- MATRIX CALCULATOR -------\n\n");
-            printf("---------------------------------\n\n");
+        printf("---------------------------------\n\n");
+        printf("------- MATRIX CALCULATOR -------\n\n");
+        printf("---------------------------------\n\n");
 
-            printf("1 - Transpose Matrix\n\n");
+        printf("1 - Transpose Matrix\n\n");
 
-            printf("Type number for wanted operation: ");
-            scanf("%d", &operation);
-    }
+        printf("Type number for wanted operation: ");
+        scanf("%d", &operation);
 
     return operation;
 }
+
