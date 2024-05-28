@@ -130,7 +130,7 @@ void getMatrix(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; ++i) {
         for (int j = 0; j < matrix->cols; ++j) {
-            printf("%d. satırın %d sutununu giriniz: ", i+1, j+1);
+            printf("%d. satirin %d sutununu giriniz: ", i+1, j+1);
             scanf("%d", (*(matrix->data + i) + j));
         }
     }
@@ -197,7 +197,7 @@ Matrix *transposeMatrix(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; ++i) {
         for (int j = 0; j < matrix->cols; ++j) {
-            transpode_matrix->data[j][i] = matrix->data[i][j];
+            *(*(transpode_matrix->data + j) + i) = *(*(matrix->data + i) + j);
         }
     }
     return transpode_matrix;
@@ -211,9 +211,9 @@ int mainPage(void) {
     printf("------- MATRIX CALCULATOR -------\n\n");
     printf("---------------------------------\n\n");
 
-    printf("1 - Transpose Matrix\n\n");
-    printf("2 - Sum 2 Matrices\n\n");
-    printf("3 - Multiply Matrices\n\n");
+    printf("1 - Transpose Matrix\n");
+    printf("2 - Sum 2 Matrices\n");
+    printf("3 - Multiply Matrices\n");
 
     printf("Type number for wanted operation: ");
     scanf("%d", &operation);
