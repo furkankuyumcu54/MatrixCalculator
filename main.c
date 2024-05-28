@@ -8,7 +8,7 @@
 
 
 typedef enum page {
-    transposePage = 1
+    transposePage = 1, sumPage, multiplyPage
 }Page;
 
 
@@ -23,6 +23,7 @@ typedef struct matrix {
 Matrix *createMatrix(char name[], int row_size, int column_size);
 void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
+void freeMatrix(Matrix *matrix);
 Matrix *transposeMatrix(Matrix *matrix);
 Matrix *sumMatrix(Matrix *matrix1,Matrix *matrix2);
 Matrix *multiplyMatrix(Matrix *matrix1,Matrix *matrix2);
@@ -134,6 +135,17 @@ void getMatrix(Matrix *matrix) {
         }
     }
 
+}
+
+
+void freeMatrix(Matrix *matrix) {
+
+    for (int i = 0; i < matrix->rows; ++i) {
+        free(*(matrix->data + i));
+    }
+
+    free(matrix->data);
+    free(matrix);
 }
 
 
