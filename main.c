@@ -2,12 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #define ROW_MAX 5
 #define COLUMN_MAX 5
+
 
 typedef enum page {
     transposePage = 1
 }Page;
+
 
 typedef struct matrix {
     char name[12];
@@ -16,16 +19,18 @@ typedef struct matrix {
     int **data;
 } Matrix;
 
+
 Matrix *createMatrix(char name[], int row_size, int column_size);
 void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
-Matrix *matris_toplama(Matrix *matrix1,Matrix *matrix2);
-Matrix *matrix_carpimi(Matrix *matrix1,Matrix *matrix2);
-Matrix *transpose(Matrix *matrix);
+Matrix *transposeMatrix(Matrix *matrix);
+Matrix *sumMatrix(Matrix *matrix1,Matrix *matrix2);
+Matrix *multiplyMatrix(Matrix *matrix1,Matrix *matrix2);
 void clearScreen();
 int mainPage(void);
 Page interface(Page page);
 int shouldContinue(int loopControl);
+
 
 int main() {
 
@@ -53,7 +58,7 @@ int main() {
                 clearScreen();
                 printMatrix(matrix);
 
-                Matrix *transepose_matrix = transpose(matrix);
+                Matrix *transepose_matrix = transposeMatrix(matrix);
                 printMatrix(transepose_matrix);
                 loopControl = shouldContinue(loopControl);
                 break;
@@ -132,15 +137,54 @@ void getMatrix(Matrix *matrix) {
 }
 
 
-Matrix *transpose(Matrix *matrix) {
+Matrix *sumMatrix(Matrix *matrix1,Matrix *matrix2) {
+
+    if (matrix1->rows != matrix2->rows || matrix1->cols != matrix2->cols) {
+        printf("Matrisler ayni boyutta olmalidir\\n\"");
+        return NULL;
+    }
+
+    Matrix *toplam = createMatrix("toplam",matrix1->rows,matrix1->cols);
+    for (int i = 0; i < matrix1->rows; ++i) {
+        for (int j = 0; j < matrix1->cols; ++j) {
+            *(*(toplam->data + i) + j) = *(*(matrix1->data + i) + j) + *(*(matrix2->data + i) + j);
+        }
+    }
+
+    return toplam;
+}
+
+
+Matrix *multiplyMatrix(Matrix *matrix1,Matrix *matrix2) {
+
+    if (matrix1->cols != matrix2->rows) {
+        printf("ilk matrisin sutun sayisi ile ikinci matrisin satir sayisi esit olmalıdır");
+        return NULL;
+    }
+
+    Matrix *carpim = createMatrix("carpim",matrix1->rows,matrix2->cols);
+    for (int i = 0; i < matrix1->rows; ++i) {
+        for (int j = 0; j < matrix2->cols; ++j) {
+            *(*(carpim->data + i) + j) = 0;
+            for (int k = 0; k < matrix1->cols; ++k) {
+                carpim->data[i][j] += matrix1->data[i][k] * matrix2->data[k][j];
+            }
+        }
+    }
+
+    return carpim;
+}
+
+
+Matrix *transposeMatrix(Matrix *matrix) {
 
     printf("Transposing ...\n");
     printf("---------------------------------\n");
 
     Matrix *transpode_matrix = createMatrix("tranpose_matrix",matrix->cols,matrix->rows);
 
-    for (int i = 0; i < matrix->rows; ++i){
-        for (int j = 0; j < matrix->cols; ++j){
+    for (int i = 0; i < matrix->rows; ++i) {
+        for (int j = 0; j < matrix->cols; ++j) {
             transpode_matrix->data[j][i] = matrix->data[i][j];
         }
     }
@@ -165,8 +209,8 @@ int mainPage(void) {
 
 
 int shouldContinue(int loopControl) {
-    char answer;
 
+    char answer;
     printf("Would you like to continue using calculator? (Y/N): ");
     scanf(" %c", &answer);
 
@@ -179,41 +223,3 @@ int shouldContinue(int loopControl) {
     return loopControl;
 }
 
-
-Matrix *matris_toplama(Matrix *matrix1,Matrix *matrix2) {
-    if (matrix1->rows != matrix2->rows || matrix1->cols != matrix2->cols){
-        printf("Matrisler ayni boyutta olmalidir\\n\"");
-        return NULL;
-    }
-    Matrix *toplam = createMatrix("toplam",matrix1->rows,matrix1->cols);
-    for (int i = 0; i < matrix1->rows; ++i)
-    {
-        for (int j = 0; j < matrix1->cols; ++j)
-        {
-            *(*(toplam->data + i) + j) = *(*(matrix1->data + i) + j) + *(*(matrix2->data + i) + j);
-        }
-    }
-
-    return toplam;
-}
-
-
-Matrix *matrix_carpimi(Matrix *matrix1,Matrix *matrix2){
-    if (matrix1->cols != matrix2->rows){
-        printf("ilk matrisin sutun sayisi ile ikinci matrisin satir sayisi esit olmalıdır");
-        return NULL;
-    }
-    Matrix *carpim = createMatrix("carpim",matrix1->rows,matrix2->cols);
-    for (int i = 0; i < matrix1->rows; ++i)
-    {
-        for (int j = 0; j < matrix2->cols; ++j)
-        {
-            carpim->data[i][j] = 0;
-            for (int k = 0; k < matrix1->cols; ++k)
-            {
-                carpim->data[i][j] += matrix1->data[i][k] * matrix2->data[k][j];
-            }
-        }
-    }
-    return carpim;
-}
