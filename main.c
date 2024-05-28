@@ -64,8 +64,54 @@ int main() {
                 loopControl = shouldContinue(loopControl);
                 break;
 
+            case sumPage:
+                printf("How many rows wanted in matrix1?: ");
+                scanf("%d", &t_rows);
+                printf("How many columns wanted in matrix1?: ");
+                scanf("%d", &t_cols);
+                printf("\n");
+
+                Matrix *matrix1 = createMatrix("matrix1", t_rows, t_cols);
+                getMatrix(matrix1);
+
+                printf("How many rows wanted in matrix2?: ");
+                scanf("%d", &t_rows);
+                printf("How many columns wanted in matrix2?: ");
+                scanf("%d", &t_cols);
+                printf("\n");
+
+                Matrix *matrix2 = createMatrix("matrix2", t_rows, t_cols);
+                getMatrix(matrix2);
+
+                printMatrix(sumMatrix(matrix1, matrix2));
+                loopControl = shouldContinue(loopControl);
+                break;
+
+            case multiplyPage:
+                printf("How many rows wanted in matrix1?: ");
+                scanf("%d", &t_rows);
+                printf("How many columns wanted in matrix1?: ");
+                scanf("%d", &t_cols);
+                printf("\n");
+
+                Matrix *createMatrix1 = createMatrix("matrix1", t_rows, t_cols);
+                getMatrix(createMatrix1);
+
+                printf("How many rows wanted in matrix2?: ");
+                scanf("%d", &t_rows);
+                printf("How many columns wanted in matrix2?: ");
+                scanf("%d", &t_cols);
+                printf("\n");
+
+                Matrix *createMatrix2 = createMatrix("matrix2", t_rows, t_cols);
+                getMatrix(createMatrix2);
+
+                printMatrix(multiplyMatrix(createMatrix1, createMatrix2));
+                loopControl = shouldContinue(loopControl);
+                break;
+
             default:
-                return 0;
+                break;
         }
     }
 
@@ -108,7 +154,7 @@ Matrix *createMatrix(char name[], int row_size, int column_size) {
             exit(1);
         }
     }
-    
+
     return matrix;
 }
 
@@ -130,7 +176,7 @@ void getMatrix(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; ++i) {
         for (int j = 0; j < matrix->cols; ++j) {
-            printf("%d. satirin %d sutununu giriniz: ", i+1, j+1);
+            printf("%d. satırın %d sutununu giriniz: ", i+1, j+1);
             scanf("%d", (*(matrix->data + i) + j));
         }
     }
@@ -197,7 +243,7 @@ Matrix *transposeMatrix(Matrix *matrix) {
 
     for (int i = 0; i < matrix->rows; ++i) {
         for (int j = 0; j < matrix->cols; ++j) {
-            *(*(transpode_matrix->data + j) + i) = *(*(matrix->data + i) + j);
+            transpode_matrix->data[j][i] = matrix->data[i][j];
         }
     }
     return transpode_matrix;
@@ -211,9 +257,9 @@ int mainPage(void) {
     printf("------- MATRIX CALCULATOR -------\n\n");
     printf("---------------------------------\n\n");
 
-    printf("1 - Transpose Matrix\n");
-    printf("2 - Sum 2 Matrices\n");
-    printf("3 - Multiply Matrices\n");
+    printf("1 - Transpose Matrix\n\n");
+    printf("2 - Sum 2 Matrices\n\n");
+    printf("3 - Multiply Matrices\n\n");
 
     printf("Type number for wanted operation: ");
     scanf("%d", &operation);
