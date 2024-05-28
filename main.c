@@ -19,6 +19,8 @@ typedef struct matrix {
 Matrix *createMatrix(char name[], int row_size, int column_size);
 void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
+Matrix *matris_toplama(Matrix *matrix1,Matrix *matrix2);
+Matrix *matrix_carpimi(Matrix *matrix1,Matrix *matrix2);
 void transpose(Matrix *matrix);
 void clearScreen();
 int mainPage(void);
@@ -176,4 +178,43 @@ int shouldContinue(int loopControl) {
     }
 
     return loopControl;
+}
+
+
+Matrix *matris_toplama(Matrix *matrix1,Matrix *matrix2) {
+    if (matrix1->rows != matrix2->rows || matrix1->cols != matrix2->cols){
+        printf("Matrisler ayni boyutta olmalidir\\n\"");
+        return NULL;
+    }
+    Matrix *toplam = createMatrix("toplam",matrix1->rows,matrix1->cols);
+    for (int i = 0; i < matrix1->rows; ++i)
+    {
+        for (int j = 0; j < matrix1->cols; ++j)
+        {
+            *(*(toplam->data + i) + j) = *(*(matrix1->data + i) + j) + *(*(matrix2->data + i) + j);
+        }
+    }
+
+    return toplam;
+}
+
+
+Matrix *matrix_carpimi(Matrix *matrix1,Matrix *matrix2){
+    if (matrix1->cols != matrix2->rows){
+        printf("ilk matrisin sutun sayisi ile ikinci matrisin satir sayisi esit olmalıdır");
+        return NULL;
+    }
+    Matrix *carpim = createMatrix("carpim",matrix1->rows,matrix2->cols);
+    for (int i = 0; i < matrix1->rows; ++i)
+    {
+        for (int j = 0; j < matrix2->cols; ++j)
+        {
+            carpim->data[i][j] = 0;
+            for (int k = 0; k < matrix1->cols; ++k)
+            {
+                carpim->data[i][j] += matrix1->data[i][k] * matrix2->data[k][j];
+            }
+        }
+    }
+    return carpim;
 }
