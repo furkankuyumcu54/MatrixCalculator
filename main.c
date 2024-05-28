@@ -84,6 +84,7 @@ int main() {
                 getMatrix(matrix2);
 
                 printMatrix(sumMatrix(matrix1, matrix2));
+                loopControl = shouldContinue(loopControl);
                 break;
 
             case multiplyPage:
@@ -106,6 +107,7 @@ int main() {
                 getMatrix(createMatrix2);
 
                 printMatrix(multiplyMatrix(createMatrix1, createMatrix2));
+                loopControl = shouldContinue(loopControl);
                 break;
 
             default:
