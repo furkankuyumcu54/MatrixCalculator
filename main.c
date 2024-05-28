@@ -21,7 +21,7 @@ void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
 Matrix *matris_toplama(Matrix *matrix1,Matrix *matrix2);
 Matrix *matrix_carpimi(Matrix *matrix1,Matrix *matrix2);
-void transpose(Matrix *matrix);
+Matrix *transpose(Matrix *matrix);
 void clearScreen();
 int mainPage(void);
 Page interface(Page page);
@@ -53,8 +53,8 @@ int main() {
                 clearScreen();
                 printMatrix(matrix);
 
-                transpose(matrix);
-                printMatrix(matrix);
+                Matrix *transepose_matrix = transpose(matrix);
+                printMatrix(transepose_matrix);
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -132,20 +132,19 @@ void getMatrix(Matrix *matrix) {
 }
 
 
-void transpose(Matrix *matrix) {
+Matrix *transpose(Matrix *matrix) {
 
     printf("Transposing ...\n");
     printf("---------------------------------\n");
 
-    strncpy(matrix->name, "Transposed1", sizeof(matrix->name));
+    Matrix *transpode_matrix = createMatrix("tranpose_matrix",matrix->cols,matrix->rows);
 
-    for (int i = 0; i < matrix->rows; i++) {
-        for (int j = i + 1; j < matrix->cols; j++) {
-            int temp = *(*(matrix->data + i) + j);
-            *(*(matrix->data + i) + j) = *(*(matrix->data + j) + i);
-            *(*(matrix->data + j) + i) = temp;
+    for (int i = 0; i < matrix->rows; ++i){
+        for (int j = 0; j < matrix->cols; ++j){
+            transpode_matrix->data[j][i] = matrix->data[i][j];
         }
     }
+    return transpode_matrix;
 }
 
 
