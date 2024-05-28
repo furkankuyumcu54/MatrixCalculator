@@ -195,14 +195,16 @@ Matrix *transposeMatrix(Matrix *matrix) {
 int mainPage(void) {
 
     int operation;
-        printf("---------------------------------\n\n");
-        printf("------- MATRIX CALCULATOR -------\n\n");
-        printf("---------------------------------\n\n");
+    printf("---------------------------------\n\n");
+    printf("------- MATRIX CALCULATOR -------\n\n");
+    printf("---------------------------------\n\n");
 
-        printf("1 - Transpose Matrix\n\n");
+    printf("1 - Transpose Matrix\n\n");
+    printf("2 - Sum 2 Matrices\n\n");
+    printf("3 - Multiply Matrices\n\n");
 
-        printf("Type number for wanted operation: ");
-        scanf("%d", &operation);
+    printf("Type number for wanted operation: ");
+    scanf("%d", &operation);
 
     return operation;
 }
