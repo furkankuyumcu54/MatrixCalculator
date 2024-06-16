@@ -7,12 +7,12 @@
 #define COLUMN_MAX 5
 
 
-typedef enum page {
+typedef enum {
     transposePage = 1, sumPage, multiplyPage
 }Page;
 
 
-typedef struct matrix {
+typedef struct{
     char name[12];
     int rows;
     int cols;
@@ -36,10 +36,12 @@ int shouldContinue(int loopControl);
 int main() {
 
     char *t_name = (char *) calloc(1, 12);
-    int t_rows, t_cols;
 
     int loopControl = 1;
     while (loopControl) {
+
+        int t_rows = 0 , t_cols= 0;
+        Matrix *t_matrix, *t_matrix1, *t_matrix2;
 
         clearScreen();
         int operation = mainPage();
@@ -53,14 +55,14 @@ int main() {
                 printf("How many columns wanted in matrix?: ");
                 scanf("%d", &t_cols);
 
-                Matrix *matrix = createMatrix(t_name, t_rows, t_cols);
-                getMatrix(matrix);
+                t_matrix = createMatrix(t_name, t_rows, t_cols);
+                getMatrix(t_matrix);
 
                 clearScreen();
-                printMatrix(matrix);
+                printMatrix(t_matrix);
 
-                Matrix *transepose_matrix = transposeMatrix(matrix);
-                printMatrix(transepose_matrix);
+                Matrix *transeposed_matrix = transposeMatrix(t_matrix);
+                printMatrix(transeposed_matrix);
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -71,8 +73,8 @@ int main() {
                 scanf("%d", &t_cols);
                 printf("\n");
 
-                Matrix *matrix1 = createMatrix("matrix1", t_rows, t_cols);
-                getMatrix(matrix1);
+                t_matrix1 = createMatrix("matrix1", t_rows, t_cols);
+                getMatrix(t_matrix1);
 
                 printf("How many rows wanted in matrix2?: ");
                 scanf("%d", &t_rows);
@@ -80,10 +82,10 @@ int main() {
                 scanf("%d", &t_cols);
                 printf("\n");
 
-                Matrix *matrix2 = createMatrix("matrix2", t_rows, t_cols);
-                getMatrix(matrix2);
+                t_matrix2 = createMatrix("matrix2", t_rows, t_cols);
+                getMatrix(t_matrix2);
 
-                printMatrix(sumMatrix(matrix1, matrix2));
+                printMatrix(sumMatrix(t_matrix1, t_matrix2));
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -94,8 +96,8 @@ int main() {
                 scanf("%d", &t_cols);
                 printf("\n");
 
-                Matrix *createMatrix1 = createMatrix("matrix1", t_rows, t_cols);
-                getMatrix(createMatrix1);
+                t_matrix1 = createMatrix("matrix1", t_rows, t_cols);
+                getMatrix(t_matrix1);
 
                 printf("How many rows wanted in matrix2?: ");
                 scanf("%d", &t_rows);
@@ -103,10 +105,10 @@ int main() {
                 scanf("%d", &t_cols);
                 printf("\n");
 
-                Matrix *createMatrix2 = createMatrix("matrix2", t_rows, t_cols);
-                getMatrix(createMatrix2);
+                t_matrix2 = createMatrix("matrix2", t_rows, t_cols);
+                getMatrix(t_matrix2);
 
-                printMatrix(multiplyMatrix(createMatrix1, createMatrix2));
+                printMatrix(multiplyMatrix(t_matrix, t_matrix2));
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -195,7 +197,7 @@ void freeMatrix(Matrix *matrix) {
 }
 
 
-Matrix *sumMatrix(Matrix *matrix1,Matrix *matrix2) {
+Matrix *sumMatrix(Matrix *matrix1, Matrix *matrix2) {
 
     if (matrix1->rows != matrix2->rows || matrix1->cols != matrix2->cols) {
         printf("Matrisler ayni boyutta olmalidir\\n\"");
@@ -213,7 +215,7 @@ Matrix *sumMatrix(Matrix *matrix1,Matrix *matrix2) {
 }
 
 
-Matrix *multiplyMatrix(Matrix *matrix1,Matrix *matrix2) {
+Matrix *multiplyMatrix(Matrix *matrix1, Matrix *matrix2) {
 
     if (matrix1->cols != matrix2->rows) {
         printf("ilk matrisin sutun sayisi ile ikinci matrisin satir sayisi esit olmalıdır");
@@ -263,6 +265,9 @@ int mainPage(void) {
 
     printf("Type number for wanted operation: ");
     scanf("%d", &operation);
+
+    if (operation < 1 || operation > 3)
+        exit(1);
 
     return operation;
 }
