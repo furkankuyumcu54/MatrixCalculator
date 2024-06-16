@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 
 #define ROW_MAX 5
@@ -81,6 +82,12 @@ int main() {
                 printf("How many columns wanted in matrix2?: ");
                 scanf("%d", &t_cols);
                 printf("\n");
+                if (t_matrix1->rows != t_rows || t_matrix1->cols != t_cols) {
+                    printf("Both matrix' row and column size must be same.\n");
+                    printf("Will return to main page in 5 seconds.\n");
+                    sleep(5);
+                    break;
+                }
 
                 t_matrix2 = createMatrix("matrix2", t_rows, t_cols);
                 getMatrix(t_matrix2);
