@@ -14,7 +14,6 @@ typedef enum {
 
 
 typedef struct{
-    char name[12];
     int rows;
     int cols;
     int **data;
@@ -24,7 +23,8 @@ typedef struct{
 Matrix *createMatrix(int row_size, int column_size);
 void printMatrix(Matrix *matrix);
 void getMatrix(Matrix *matrix);
-void saveMatrix(Matrix *matrix, FILE *dosya);
+void saveMatrix(Matrix *matrix);
+void readMatrix(void);
 void freeMatrix(Matrix *matrix);
 Matrix *transposeMatrix(Matrix *matrix);
 Matrix *sumMatrix(Matrix *matrix1,Matrix *matrix2);
@@ -36,12 +36,9 @@ int shouldContinue(int loopControl);
 
 int main() {
 
-    FILE *file = fopen("matrix.db", "wb+");
-
     int loopControl = 1;
     while (loopControl) {
 
-        char *t_name = calloc(1, 12);
         int t_rows = 0 , t_cols= 0;
         Matrix *t_matrix, *t_matrix1, *t_matrix2;
 
@@ -52,12 +49,14 @@ int main() {
                 clearScreen();
                 printf("Saved Matrices:\n\n");
                 printf("---------------------------------\n\n");
-                while (feof(file)) {
-                    fread(t_name, sizeof(t_name), 1, file);
-                }
-                printf("Press any key to continue.");
+
+                readMatrix();
+
+                printf("Press Enter to continue.");
+                getchar();
                 getchar();
                 break;
+
             case transposePage:
                 printf("How many rows wanted in matrix?: ");
                 scanf("%d", &t_rows);
@@ -72,6 +71,7 @@ int main() {
 
                 Matrix *transeposed_matrix = transposeMatrix(t_matrix);
                 printMatrix(transeposed_matrix);
+                saveMatrix(transeposed_matrix);
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -100,7 +100,9 @@ int main() {
                 t_matrix2 = createMatrix(t_rows, t_cols);
                 getMatrix(t_matrix2);
 
-                printMatrix(sumMatrix(t_matrix1, t_matrix2));
+                Matrix *sum_matrix = sumMatrix(t_matrix1, t_matrix2);
+                printMatrix(sum_matrix);
+                saveMatrix(sum_matrix);
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -123,7 +125,9 @@ int main() {
                 t_matrix2 = createMatrix(t_rows, t_cols);
                 getMatrix(t_matrix2);
 
-                printMatrix(multiplyMatrix(t_matrix, t_matrix2));
+                Matrix *m_matrix = multiplyMatrix(t_matrix1, t_matrix2);
+                printMatrix(m_matrix);
+                saveMatrix(m_matrix);
                 loopControl = shouldContinue(loopControl);
                 break;
 
@@ -137,11 +141,11 @@ int main() {
 
 
 void clearScreen() {
-    #ifdef _WIN32
-        system("cls");
-    #elif defined(__linux__)
-        system("clear");
-    #endif
+#ifdef _WIN32
+    system("cls");
+#elif defined(__linux__)
+    system("clear");
+#endif
 }
 
 
@@ -198,21 +202,64 @@ void getMatrix(Matrix *matrix) {
 }
 
 
-void saveMatrix(Matrix *matrix, FILE *file) {
+void saveMatrix(Matrix *matrix) {
 
-    char *t_name = (char *) calloc(1, 12);
+    FILE *file = fopen("matrix.txt", "a");
 
-    printf("What name you want to give to this matrix?: ");
-    getchar();
-    fgets(t_name, 12, stdin);
+    char answer;
+    printf("Would you like to save this matrix? (Y/N): ");
+    scanf(" %c", &answer);
 
-    fwrite(t_name, sizeof(t_name), 1, file);
-    for (int i = 0; i < matrix->rows; ++i) {
-        for (int j = 0; j < matrix->cols; ++j) {
-            fwrite((*(matrix->data + i) + j), sizeof(int), 1, file);
+    if (answer == 'Y' || answer == 'y') {
+        char *t_name = (char *) calloc(1, 12);
+
+        printf("What name you want to give to this matrix?: ");
+        getchar();
+        fgets(t_name, 12, stdin);
+        printf("\n---------------------------------\n\n");
+
+        fseek(file, 0, SEEK_END);
+        fprintf(file, "%s\n", t_name);
+        fprintf(file, "%d %d\n", matrix->rows, matrix->cols);
+
+        for (int i = 0; i < matrix->rows; ++i) {
+            for (int j = 0; j < matrix->cols; ++j) {
+                fprintf(file, "%d\t", *(*(matrix->data + i) + j));
+            }
+            fprintf(file, "\n");
         }
     }
+    fclose(file);
+}
 
+
+void readMatrix(void) {
+
+    FILE *file = fopen("matrix.txt", "r");
+
+    while (!feof(file)) {
+
+        char *s_name = calloc(1, 12);
+        int s_rows, s_cols, s_data;
+
+        fscanf(file, "%s\n", s_name);
+        fscanf(file, "%d %d\n", &s_rows, &s_cols);
+
+        Matrix *s_matrix = createMatrix(s_rows,s_cols);
+
+        printf("Matrix name = %s\n\n", s_name);
+        for (int i = 0; i < s_rows; ++i) {
+            for (int j = 0; j < s_cols; ++j) {
+                fscanf(file, "%d\t", *(s_matrix->data + i) + j);
+            }
+            fscanf(file, "\n");
+        }
+        printMatrix(s_matrix);
+        freeMatrix(s_matrix);
+        printf("\n---------------------------------\n\n");
+        fgetc(file);
+    }
+    fclose(file);
 }
 
 
